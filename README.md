@@ -4,10 +4,16 @@
 ```bash
 loch --help
 loch init --dry_run
-loch init --dry_run --include_folders 'src' 'local files'
-loch init --dry_run --exclude_folders '.venv' '.ruff-cache' '__pycache__'
-loch init --dry_run --include_filetypes '.py' '.json'
-loch init --dry_run --exclude_filetypes '.json' '.pdf'
+
+# it doesn't make sense to include all arguments at once,
+#  but here are examples for all of them:
+loch init --dry_run \
+      --include_folders 'src' 'local files' \
+      --exclude_folders '.venv' '.ruff-cache' '__pycache__' \
+      --include_filetypes '.py' '.json' \
+      --exclude_filetypes '.json' '.pdf' \
+      --include_dot_folders \
+      --include_leading_underscore_folders
 loch init
 loch search
 loch clean
