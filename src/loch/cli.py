@@ -7,7 +7,7 @@ from pathlib import Path
 
 from loch import constants
 from loch.filesystem import list_filepaths
-from loch.databases import create_search_databases
+from loch.search_databases import create_search_databases
 
 
 def main():
