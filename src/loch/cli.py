@@ -1,11 +1,13 @@
 """CLI entrypoint to the loch package"""
 
 import argparse
+import json
+import shutil
 from pathlib import Path
 
 from loch import constants
 from loch.filesystem import list_filepaths
-from loch.databases import vector_db
+from loch.databases import create_search_databases
 
 
 def main():
@@ -34,7 +36,7 @@ def main():
     )
     init_parser.add_argument(
         "--include_folders",
-        help="Only these folders will be included",
+        help="Only these folders (and their subfolders) will be included",
         nargs="*",
         metavar="DIR",
     )
@@ -54,13 +56,51 @@ def main():
             )
             print("Run `loch clean` to delete the existing project")
             exit()
+
         filepaths_to_process: list[Path] = list_filepaths()
         if args.dry_run:
+            print("The following files would be included:")
             for filepath in filepaths_to_process:
-                print(filepath)
+                print("\t", filepath)
+            exit()
+
+        constants.LOCAL_PROJECT_PATH.mkdir()
+        constants.LOCAL_DATABASES_PATH.mkdir()
+
+        search_methods: dict[str, bool] = {}
+        for search_name in (
+            "semantic vector search",
+            "keyword search (bm25)",
+        ):
+            while True:
+                user_input: str = input(f"Do you wish to include {search_name}? [y/n] ")
+                if user_input in ("y", "n"):
+                    break
+                print("\t invalid input - accepted values are ['y', 'n']")
+            search_methods[search_name] = user_input == "y"
+
+        with open(constants.LOCAL_PROJECT_PATH / "config.json", "w") as file:
+            json.dump(
+                {
+                    "available_search_methods": search_methods,
+                },
+                file,
+                indent=4
+            )
+
+        create_search_databases()
 
     elif args.command == "search":
         print("You ran the search command")
 
     elif args.command == "clean":
-        print("You ran the clean command")
+        if not constants.LOCAL_PROJECT_PATH.exists():
+            print(f"No local project found at '{constants.LOCAL_PROJECT_PATH}'")
+            exit()
+        user_confirmation = input("Are you sure that you want to delete all databases and indexes?\
+ (anything other than 'yes' will abort): ")
+        if user_confirmation == "yes":
+            shutil.rmtree(constants.LOCAL_PROJECT_PATH) 
+            print("deleted `loch` project")
+        else:
+            print("..aborted")
