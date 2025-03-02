@@ -5,13 +5,16 @@ Functions for interacting with the local filesystem
 from pathlib import Path
 from typing import Optional
 
+
 def is_in_dot_folder(path: Path) -> bool:
     """Returns True if the path is inside a dot-folder at any level."""
-    return any(part.startswith('.') for part in path.parts)
+    return any(part.startswith(".") for part in path.parts)
+
 
 def is_in_leading_underscore_folder(path: Path) -> bool:
     """Returns True if the path is inside a folder whose name has a leading underscore, at any level."""
-    return any(part.startswith('_') for part in path.parts)
+    return any(part.startswith("_") for part in path.parts)
+
 
 def list_filepaths(
     include_folders: Optional[list[str]] = None,
@@ -29,9 +32,9 @@ def list_filepaths(
         if not path.is_file():
             continue
         if exclude_dot_folders and is_in_dot_folder(path):
-            continue    
+            continue
         if exclude_leading_underscore_folders and is_in_leading_underscore_folder(path):
-            continue    
+            continue
         filepaths_to_include.append(path)
 
     return filepaths_to_include
