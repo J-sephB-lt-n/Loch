@@ -2,11 +2,13 @@ import json
 from pathlib import Path
 
 import lancedb
-import lancedb.embeddings
 import lancedb.pydantic
 
 from loch import constants
 from loch.cli import print_progress_bar
+from loch.language_models.semantic_vector_embedding import (
+    create_semantic_vector_embedding_model,
+)
 
 
 def create_search_databases(filepaths_to_process: list[Path]) -> None:
@@ -35,13 +37,8 @@ def create_search_databases(filepaths_to_process: list[Path]) -> None:
 
         if include_semantic:
             print("loading embedding model")
-            embed_model = (
-                lancedb.embeddings.get_registry()
-                .get("sentence-transformers")
-                .create(
-                    name="mixedbread-ai/mxbai-embed-large-v1",
-                    device="cpu",
-                )
+            embed_model = create_semantic_vector_embedding_model(
+                model_name=constants.DEFAULT_SEMANTIC_EMBEDDING_MODEL_NAME,
             )
 
             class Embedding(lancedb.pydantic.LanceModel):
@@ -72,4 +69,4 @@ def create_search_databases(filepaths_to_process: list[Path]) -> None:
 
         if include_bm25:
             print("Creating Full-Text-Search (FTS) index on vector database")
-            vector_db_table.create_fts_index("text", use_tantivy=False)
+            vector_db_table.create_fts_index("text", use_tantivy=True)
