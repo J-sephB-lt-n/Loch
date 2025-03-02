@@ -30,6 +30,7 @@ def create_search_databases(filepaths_to_process: list[Path]) -> None:
             print_progress_bar(file_num, len(filepaths_to_process), bar_len=50)
 
     if include_semantic or include_bm25:
+        print("Creating vector database")
         vector_db = lancedb.connect(constants.VECTOR_DB_PATH)
 
         if include_semantic:
@@ -42,24 +43,33 @@ def create_search_databases(filepaths_to_process: list[Path]) -> None:
                     device="cpu",
                 )
             )
-        if include_semantic and include_bm25:
 
             class Embedding(lancedb.pydantic.LanceModel):
+                filepath: str
                 text: str = embed_model.SourceField()
                 vector: lancedb.pydantic.Vector(embed_model.ndims()) = (
                     embed_model.VectorField()
                 )
-        elif include_semantic and not include_bm25:
+        elif not include_semantic:
 
             class Embedding(lancedb.pydantic.LanceModel):
-                vector: lancedb.pydantic.Vector(embed_model.ndims()) = (
-                    embed_model.VectorField()
-                )
-        elif not include_semantic and include_bm25:
-
-            class Embedding(lancedb.pydantic.LanceModel):
-                text: str = embed_model.SourceField()
+                filepath: str
+                text: str
         else:
             raise ValueError("Embedding schema not defined")
 
+        print("Adding vectors to vector database")
         vector_db_table = vector_db.create_table("vector_embeddings", schema=Embedding)
+        vector_db_table.add(
+            [
+                {
+                    "filepath": str(filepath),
+                    "text": file_contents,
+                }
+                for filepath, file_contents in files_contents.items()
+            ]
+        )
+
+        if include_bm25:
+            print("Creating Full-Text-Search (FTS) index on vector database")
+            vector_db_table.create_fts_index("text", use_tantivy=False)
