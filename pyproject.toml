@@ -5,7 +5,11 @@ description = "A python CLI tool enabling local search over files"
 readme = "README.md"
 authors = [{ name = "J-sephB-lt-n", email = "joseph.jazz.bolton@gmail.com" }]
 requires-python = ">=3.13"
-dependencies = ["lancedb>=0.19.0", "sentence-transformers>=3.4.1"]
+dependencies = [
+    "lancedb>=0.19.0",
+ "sentence-transformers>=3.4.1",
+ "tantivy>=0.22.0",
+]
 
 [build-system]
 requires = ["hatchling"]

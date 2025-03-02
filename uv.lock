@@ -256,6 +256,7 @@ source = { editable = "." }
 dependencies = [
     { name = "lancedb" },
     { name = "sentence-transformers" },
+    { name = "tantivy" },
 ]
 
 [package.dev-dependencies]
@@ -272,6 +273,7 @@ lint = [
 requires-dist = [
     { name = "lancedb", specifier = ">=0.19.0" },
     { name = "sentence-transformers", specifier = ">=3.4.1" },
+    { name = "tantivy", specifier = ">=0.22.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -939,6 +941,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/ca/99/5a5b6f19ff9f08367
 wheels = [
     { url = "https://files.pythonhosted.org/packages/b2/fe/81695a1aa331a842b582453b605175f419fe8540355886031328089d840a/sympy-1.13.1-py3-none-any.whl", hash = "sha256:db36cdc64bf61b9b24578b6f7bab1ecdd2452cf008f34faa33776680c26d66f8", size = 6189177 },
 ]
+
+[[package]]
+name = "tantivy"
+version = "0.22.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/96/e2/0a7b8ce41e9717544648ce1fa511cd37f5d634cc6daef48c03157ec7462b/tantivy-0.22.0.tar.gz", hash = "sha256:dce07fa2910c94934aa3d96c91087936c24e4a5802d839625d67edc6d1c95e5c", size = 60732 }
 
 [[package]]
 name = "threadpoolctl"
