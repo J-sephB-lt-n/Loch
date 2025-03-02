@@ -7,25 +7,23 @@ from pathlib import Path
 
 from loch import constants
 from loch.filesystem import list_filepaths
-from loch.search_databases import create_search_databases
+from loch.databases import create_search_databases
 
 
 def main():
-    arg_parser = argparse.ArgumentParser(
-        description="Local search over files"
-    )
+    arg_parser = argparse.ArgumentParser(description="Local search over files")
     subparsers = arg_parser.add_subparsers(dest="command", required=True)
 
     init_parser = subparsers.add_parser(
-        "init", 
+        "init",
         help="Create a new search database",
     )
     search_parser = subparsers.add_parser(
-        "search", 
+        "search",
         help="Query local search database",
     )
     clean_parser = subparsers.add_parser(
-        "clean", 
+        "clean",
         help="Delete local search database",
     )
 
@@ -58,6 +56,7 @@ def main():
             exit()
 
         filepaths_to_process: list[Path] = list_filepaths()
+        print(f"including {len(filepaths_to_process):,} files")
         if args.dry_run:
             print("The following files would be included:")
             for filepath in filepaths_to_process:
@@ -85,10 +84,10 @@ def main():
                     "available_search_methods": search_methods,
                 },
                 file,
-                indent=4
+                indent=4,
             )
 
-        create_search_databases()
+        create_search_databases(filepaths_to_process)
 
     elif args.command == "search":
         print("You ran the search command")
@@ -97,10 +96,12 @@ def main():
         if not constants.LOCAL_PROJECT_PATH.exists():
             print(f"No local project found at '{constants.LOCAL_PROJECT_PATH}'")
             exit()
-        user_confirmation = input("Are you sure that you want to delete all databases and indexes?\
- (anything other than 'yes' will abort): ")
+        user_confirmation = input(
+            "Are you sure that you want to delete all databases and indexes?\
+ (anything other than 'yes' will abort): "
+        )
         if user_confirmation == "yes":
-            shutil.rmtree(constants.LOCAL_PROJECT_PATH) 
+            shutil.rmtree(constants.LOCAL_PROJECT_PATH)
             print("deleted `loch` project")
         else:
             print("..aborted")
