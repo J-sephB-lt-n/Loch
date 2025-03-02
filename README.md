@@ -19,3 +19,10 @@ loch search
 loch clean
 ```
 
+Future search approaches to explore:
+
+- Graph database
+
+- Semantic search/BM25 with chunking (there are many chunking methods)
+
+- Tag-based search (with tags written by a local LLM)
