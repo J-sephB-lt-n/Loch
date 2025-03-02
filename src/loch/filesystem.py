@@ -31,6 +31,8 @@ def list_filepaths(
     for path in Path(".").rglob("*"):
         if not path.is_file():
             continue
+        if include_filetypes and path.suffix not in include_filetypes:
+            continue
         if exclude_dot_folders and is_in_dot_folder(path):
             continue
         if exclude_leading_underscore_folders and is_in_leading_underscore_folder(path):

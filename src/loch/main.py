@@ -38,11 +38,19 @@ def main():
         nargs="*",
         metavar="DIR",
     )
+    (
+        init_parser.add_argument(
+            "--exclude_folders",
+            help="All folders aside from these folders will be included",
+            nargs="*",
+            metavar="DIR",
+        ),
+    )
     init_parser.add_argument(
-        "--exclude_folders",
-        help="All folders aside from these folders will be included",
+        "--include_filetypes",
+        help="Only these file extensions will be included e.g. --include_filetypes .yaml .ini .json",
         nargs="*",
-        metavar="DIR",
+        metavar="EXT",
     )
 
     args = arg_parser.parse_args()
@@ -55,7 +63,9 @@ def main():
             print("Run `loch clean` to delete the existing project")
             exit()
 
-        filepaths_to_process: list[Path] = list_filepaths()
+        filepaths_to_process: list[Path] = list_filepaths(
+            include_filetypes=args.include_filetypes,
+        )
         print(f"including {len(filepaths_to_process):,} files")
         if args.dry_run:
             print("The following files would be included:")
