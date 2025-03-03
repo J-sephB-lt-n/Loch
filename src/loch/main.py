@@ -87,6 +87,13 @@ def main():
                     break
                 print("\t invalid input - accepted values are ['y', 'n']")
             search_methods[search_name] = user_input == "y"
+        if (
+            search_methods["semantic vector search"]
+            and search_methods["keyword search (bm25)"]
+        ):
+            search_methods["hybrid search (semantic + bm25)"] = True
+        else:
+            search_methods["hybrid search (semantic + bm25)"] = False
 
         with open(constants.LOCAL_PROJECT_PATH / "config.json", "w") as file:
             json.dump(
