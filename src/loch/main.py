@@ -8,6 +8,7 @@ from pathlib import Path
 from loch import constants
 from loch.filesystem import list_filepaths
 from loch.databases import create_search_databases
+from loch.search import run_search
 
 
 def main():
@@ -107,7 +108,7 @@ def main():
         create_search_databases(filepaths_to_process)
 
     elif args.command == "search":
-        print("You ran the search command")
+        run_search()
 
     elif args.command == "clean":
         if not constants.LOCAL_PROJECT_PATH.exists():
