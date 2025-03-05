@@ -13,7 +13,7 @@ from loch.language_models.semantic_vector_embedding import (
 
 def create_search_databases(filepaths_to_process: list[Path]) -> None:
     """
-    TODO
+    Add the contents of each included file into search databases
     """
     with open(constants.LOCAL_PROJECT_PATH / "config.json", "r") as file:
         config: dict = json.load(file)
@@ -56,7 +56,7 @@ def create_search_databases(filepaths_to_process: list[Path]) -> None:
             raise ValueError("Embedding schema not defined")
 
         print("Adding vectors to vector database")
-        vector_db_table = vector_db.create_table("vector_embeddings", schema=Embedding)
+        vector_db_table = vector_db.create_table("vector_search", schema=Embedding)
         vector_db_table.add(
             [
                 {
