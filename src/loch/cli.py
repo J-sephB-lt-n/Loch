@@ -1,6 +1,5 @@
 """
-TAGS: bar|complete|completed|percent|percentage|progress|progress-bar|tqdm
-DESCRIPTION: Basic progress bar printed to stdout
+Functions related to the terminal command line
 """
 
 import sys
@@ -42,18 +41,18 @@ def print_progress_bar(
     if iteration_num == final_iteration_num:
         print()
 
+
 def get_user_input_from_fixed_options(options: list[str]) -> str:
     """Get user input, not letting them proceed until they choose one of the allowed options"""
     options_map: dict[str, str] = {
-        str(option_num): option
-        for option_num, option in enumerate(options, start=1)
+        str(option_num): option for option_num, option in enumerate(options, start=1)
     }
     while True:
-        print("Please select one of the following:")
+        print("Available options are:")
         for option_num, option in options_map.items():
             print(f"\t({option_num}) {option}")
         print(
-            "(enter one of {", 
+            "(enter one of {",
             ",".join(options_map.keys()),
             "})",
             sep="",
@@ -62,9 +61,7 @@ def get_user_input_from_fixed_options(options: list[str]) -> str:
         if selected in options_map.keys():
             return options_map[selected]
         else:
-            print(
-                f"Invalid selection '{selected}'"
-            )
+            print(f"Invalid selection '{selected}'")
 
 
 if __name__ == "__main__":
