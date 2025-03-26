@@ -30,11 +30,11 @@ def run_search() -> None:
         vector_db = lancedb.connect(constants.VECTOR_DB_PATH)
         vector_db_table = vector_db.open_table("vector_search")
 
-    if "semantic vector search" in available_search_methods:
-        print("Loading embedding model")
-        embed_model = create_semantic_vector_embedding_model(
-            model_name=constants.DEFAULT_SEMANTIC_EMBEDDING_MODEL_NAME,
-        )
+    # if "semantic vector search" in available_search_methods:
+    #     print("Loading embedding model")
+    #     embed_model = create_semantic_vector_embedding_model(
+    #         model_name=constants.DEFAULT_SEMANTIC_EMBEDDING_MODEL_NAME,
+    #     )
 
     while True:
         print("Please select a search method")
@@ -55,12 +55,16 @@ def run_search() -> None:
                 vector_db_table.search(
                     user_query,
                     query_type={
-                        "semantic_vector_search": "vector",
+                        "semantic vector search": "vector",
                         "keyword search (bm25)": "fts",
                         "hybrid search (semantic + bm25)": "hybrid",
                     }.get(user_choice),
                 )
-                .select(["filepath", "_distance"])
+                .select(
+                    [
+                        "filepath",
+                    ]
+                )
                 .limit(10)
                 .to_list()
             )

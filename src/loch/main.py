@@ -6,6 +6,7 @@ import shutil
 from pathlib import Path
 
 from loch import constants
+from loch.cli import get_user_input_from_fixed_options
 from loch.filesystem import list_filepaths
 from loch.databases import create_search_databases
 from loch.search import run_search
@@ -19,14 +20,14 @@ def main():
         "init",
         help="Create a new search database",
     )
-    # search_parser = subparsers.add_parser(
-    #     "search",
-    #     help="Query local search database",
-    # )
-    # clean_parser = subparsers.add_parser(
-    #     "clean",
-    #     help="Delete local search database",
-    # )
+    search_parser = subparsers.add_parser(
+        "search",
+        help="Query local search database",
+    )
+    clean_parser = subparsers.add_parser(
+        "clean",
+        help="Delete local search database",
+    )
 
     init_parser.add_argument(
         "--dry_run",
@@ -79,7 +80,6 @@ def main():
         for search_name in (
             "semantic vector search",
             "keyword search (bm25)",
-            "Hypothetical Document Embeddings (HyDE)",
             "Automatic tagging (using a LLM)",
         ):
             while True:
@@ -88,6 +88,7 @@ def main():
                     break
                 print("\t invalid input - accepted values are ['y', 'n']")
             search_methods[search_name] = user_input == "y"
+
         if (
             search_methods["semantic vector search"]
             and search_methods["keyword search (bm25)"]
@@ -96,21 +97,22 @@ def main():
         else:
             search_methods["hybrid search (semantic + bm25)"] = False
 
-        if (
-            search_methods["Hypothetical Document Embeddings (HyDE)"]
-            and not search_methods["semantic vector search"]
-            and not search_methods["keyword search (bm25)"]
-        ):
-            print(
-                "WARNING: Hypothetical Document Embeddings (HyDE) requires",
-                "'semantic vector search' and/or 'keyword search (bm25) to be enabled'",
-            )
-            search_methods["Hypothetical Document Embeddings (HyDE)"] = False
+        query_rewrite_methods: dict[str, bool] = {}
+        for rewrite_method in ("Hypothetical Document Embeddings (HyDE)",):
+            while True:
+                user_input: str = input(
+                    f"Do you want to include query rewriting method '{rewrite_method}'? [y/n] "
+                )
+                if user_input in ("y", "n"):
+                    break
+                print("\t invalid input - accepted values are ['y', 'n']")
+            query_rewrite_methods[rewrite_method] = user_input == "y"
 
         with open(constants.LOCAL_PROJECT_PATH / "config.json", "w") as file:
             json.dump(
                 {
                     "available_search_methods": search_methods,
+                    "available_query_rewrite_methods": query_rewrite_methods,
                 },
                 file,
                 indent=4,

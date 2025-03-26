@@ -254,6 +254,7 @@ name = "loch"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
+    { name = "jinja2" },
     { name = "lancedb" },
     { name = "sentence-transformers" },
     { name = "tantivy" },
@@ -271,6 +272,7 @@ lint = [
 
 [package.metadata]
 requires-dist = [
+    { name = "jinja2", specifier = ">=3.1.5" },
     { name = "lancedb", specifier = ">=0.19.0" },
     { name = "sentence-transformers", specifier = ">=3.4.1" },
     { name = "tantivy", specifier = ">=0.22.0" },

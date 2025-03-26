@@ -4,6 +4,7 @@ Functions related to the terminal command line
 
 import sys
 import time
+from typing import Optional
 
 
 def print_progress_bar(
@@ -42,7 +43,9 @@ def print_progress_bar(
         print()
 
 
-def get_user_input_from_fixed_options(options: list[str]) -> str:
+def get_user_input_from_fixed_options(
+    options: list[str],
+) -> str:
     """Get user input, not letting them proceed until they choose one of the allowed options"""
     options_map: dict[str, str] = {
         str(option_num): option for option_num, option in enumerate(options, start=1)
