@@ -46,16 +46,25 @@ def run_search() -> None:
         print(f"Search method '{user_choice}' selected")
         user_query: str = input("Please enter your search query: ")
 
-        if user_choice == "semantic vector search":
+        if user_choice in (
+            "semantic vector search",
+            "keyword search (bm25)",
+            "hybrid search (semantic + bm25)",
+        ):
             search_results = (
                 vector_db_table.search(
                     user_query,
-                    query_type="vector",
+                    query_type={
+                        "semantic_vector_search": "vector",
+                        "keyword search (bm25)": "fts",
+                        "hybrid search (semantic + bm25)": "hybrid",
+                    }.get(user_choice),
                 )
                 .select(["filepath", "_distance"])
                 .limit(10)
                 .to_list()
             )
+
             for result in search_results:
                 print(
                     json.dumps(
@@ -63,5 +72,5 @@ def run_search() -> None:
                         indent=4,
                     )
                 )
-            
+
         print("\nStarting a new search")

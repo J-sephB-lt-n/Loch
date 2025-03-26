@@ -19,14 +19,14 @@ def main():
         "init",
         help="Create a new search database",
     )
-    search_parser = subparsers.add_parser(
-        "search",
-        help="Query local search database",
-    )
-    clean_parser = subparsers.add_parser(
-        "clean",
-        help="Delete local search database",
-    )
+    # search_parser = subparsers.add_parser(
+    #     "search",
+    #     help="Query local search database",
+    # )
+    # clean_parser = subparsers.add_parser(
+    #     "clean",
+    #     help="Delete local search database",
+    # )
 
     init_parser.add_argument(
         "--dry_run",
@@ -39,13 +39,11 @@ def main():
         nargs="*",
         metavar="DIR",
     )
-    (
-        init_parser.add_argument(
-            "--exclude_folders",
-            help="All folders aside from these folders will be included",
-            nargs="*",
-            metavar="DIR",
-        ),
+    init_parser.add_argument(
+        "--exclude_folders",
+        help="All folders aside from these folders will be included",
+        nargs="*",
+        metavar="DIR",
     )
     init_parser.add_argument(
         "--include_filetypes",
@@ -81,6 +79,8 @@ def main():
         for search_name in (
             "semantic vector search",
             "keyword search (bm25)",
+            "Hypothetical Document Embeddings (HyDE)",
+            "Automatic tagging (using a LLM)",
         ):
             while True:
                 user_input: str = input(f"Do you wish to include {search_name}? [y/n] ")
@@ -95,6 +95,17 @@ def main():
             search_methods["hybrid search (semantic + bm25)"] = True
         else:
             search_methods["hybrid search (semantic + bm25)"] = False
+
+        if (
+            search_methods["Hypothetical Document Embeddings (HyDE)"]
+            and not search_methods["semantic vector search"]
+            and not search_methods["keyword search (bm25)"]
+        ):
+            print(
+                "WARNING: Hypothetical Document Embeddings (HyDE) requires",
+                "'semantic vector search' and/or 'keyword search (bm25) to be enabled'",
+            )
+            search_methods["Hypothetical Document Embeddings (HyDE)"] = False
 
         with open(constants.LOCAL_PROJECT_PATH / "config.json", "w") as file:
             json.dump(
