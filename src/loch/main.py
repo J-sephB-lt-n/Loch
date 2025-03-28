@@ -42,13 +42,19 @@ def main():
     )
     init_parser.add_argument(
         "--exclude_folders",
-        help="All folders aside from these folders will be included",
+        help="These folders (and their subfolders) will not be included",
         nargs="*",
         metavar="DIR",
     )
     init_parser.add_argument(
         "--include_filetypes",
         help="Only these file extensions will be included e.g. --include_filetypes .yaml .ini .json",
+        nargs="*",
+        metavar="EXT",
+    )
+    init_parser.add_argument(
+        "--exclude_filetypes",
+        help="Files with these extensions will be excluded e.g. --exclude_filetypes .yaml .ini .json",
         nargs="*",
         metavar="EXT",
     )
