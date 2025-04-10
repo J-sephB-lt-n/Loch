@@ -7,7 +7,7 @@ from pathlib import Path
 
 from loch import constants
 from loch.cli import get_user_input_from_fixed_options
-from loch.filesystem import list_filepaths
+from loch.filesystem import filter_filepaths 
 from loch.databases import create_search_databases
 from loch.search import run_search
 
@@ -39,24 +39,28 @@ def main():
         help="Only these folders (and their subfolders) will be included",
         nargs="*",
         metavar="DIR",
+        type=Path,
     )
     init_parser.add_argument(
         "--exclude_folders",
         help="These folders (and their subfolders) will not be included",
         nargs="*",
         metavar="DIR",
+        type=Path,
     )
     init_parser.add_argument(
         "--include_filetypes",
         help="Only these file extensions will be included e.g. --include_filetypes .yaml .ini .json",
         nargs="*",
         metavar="EXT",
+        type=Path,
     )
     init_parser.add_argument(
         "--exclude_filetypes",
         help="Files with these extensions will be excluded e.g. --exclude_filetypes .yaml .ini .json",
         nargs="*",
         metavar="EXT",
+        type=Path,
     )
 
     args = arg_parser.parse_args()
@@ -69,8 +73,12 @@ def main():
             print("Run `loch clean` to delete the existing project")
             exit()
 
-        filepaths_to_process: list[Path] = list_filepaths(
+        filepaths_to_process: list[Path] = filter_filepaths(
+            filepaths=Path(".").rglob("*"),
+            include_folders=args.include_folders, 
+            exclude_folders=args.exclude_folders,
             include_filetypes=args.include_filetypes,
+            exclude_filetypes=args.exclude_filetypes,
         )
         print(f"including {len(filepaths_to_process):,} files")
         if args.dry_run:
