@@ -6,10 +6,12 @@ readme = "README.md"
 authors = [{ name = "J-sephB-lt-n", email = "joseph.jazz.bolton@gmail.com" }]
 requires-python = ">=3.13"
 dependencies = [
-    "jinja2>=3.1.5",
-    "lancedb>=0.19.0",
-    "sentence-transformers>=3.4.1",
-    "tantivy>=0.22.0",
+  "blessed>=1.20.0",
+  "jinja2>=3.1.5",
+  "lancedb>=0.19.0",
+  "sentence-transformers>=3.4.1",
+  "tantivy>=0.22.0",
+  "textual>=3.0.1",
 ]
 
 [build-system]
@@ -18,10 +20,7 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 lint = ["mypy>=1.15.0", "pylint>=3.3.4", "ruff>=0.9.9"]
-dev = [
-    "ipython>=9.0.0",
-    "wat-inspector>=0.4.3",
-]
+dev = ["ipython>=9.0.0", "wat-inspector>=0.4.3"]
 
 [project.scripts]
 loch = "loch.main:main"
