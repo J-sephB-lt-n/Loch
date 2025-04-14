@@ -1,6 +1,20 @@
 
 # LOCH (LOcal searCH)
 
+NEW PLAN!
+
+`loch init` initialises a new project (fails if one already exists):
+
+- first menu is file selector
+
+- second menu is which search methods to create indexes for
+
+- third method is setup for each selected method (loops through each and runs it's `setup(step="index")` method)
+
+`loch query` opens a menu where you can select your method (from the available methods). Then,the `setup(step="query")` method is run, and then the `query()` method is run in a while loop.
+
+`loch cleanup` deletes the project in the current folder (if there is one)
+
 ```bash
 loch --help
 loch init --dry_run
