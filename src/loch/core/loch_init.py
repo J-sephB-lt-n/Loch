@@ -21,9 +21,15 @@ def loch_init():
     constants.LOCAL_DATABASES_PATH.mkdir()
 
     selected_files: list[Path] = tui.launch_file_selector()
+    selected_query_methods: list[str] = tui.launch_multi_select(
+        options=constants.AVAILABLE_QUERY_ALGS,
+    )
 
     project_config = loch.data_models.ProjectConfig(
-        algs={},
+        algs={
+            alg_name: (alg_name in selected_query_methods)
+            for alg_name in constants.AVAILABLE_QUERY_ALGS
+        },
         searchable_files=selected_files,
     )
 

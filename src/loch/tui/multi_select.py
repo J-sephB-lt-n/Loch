@@ -1,7 +1,14 @@
+"""
+docstring TODO
+"""
+
 from blessed import Terminal
 
 
-def cli_multi_select(options):
+def launch_multi_select(options: list[str]) -> list[str]:
+    """
+    TODO
+    """
     term = Terminal()
     selected = [False] * len(options)
     cursor = 0
@@ -54,7 +61,7 @@ def cli_multi_select(options):
 
 # Example usage
 if __name__ == "__main__":
-    result = cli_multi_select(
+    result = launch_multi_select(
         [
             "Option 1",
             "Option 2",
