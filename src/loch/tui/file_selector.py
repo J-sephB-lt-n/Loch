@@ -34,7 +34,7 @@ def load_file_contents(path):
         return ["[Unable to read file]"]
 
 
-def launch_file_selector() -> set[Path]:
+def launch_file_selector() -> list[Path]:
     base_path = Path(".").resolve()
     file_tree = build_file_tree(base_path)
     selected_files = set()
@@ -135,7 +135,7 @@ def launch_file_selector() -> set[Path]:
             elif key == "q" or key.name == "KEY_ESCAPE":
                 break
 
-    return selected_files
+    return sorted([filepath for filepath in selected_files if not filepath.is_dir()])
 
 
 def main():

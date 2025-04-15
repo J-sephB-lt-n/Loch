@@ -20,8 +20,7 @@ def loch_init():
     constants.LOCAL_PROJECT_PATH.mkdir()
     constants.LOCAL_DATABASES_PATH.mkdir()
 
-    selected_files: set[Path] = tui.launch_file_selector()
-    print(selected_files)
+    selected_files: list[Path] = tui.launch_file_selector()
 
     project_config = loch.data_models.ProjectConfig(
         algs={},

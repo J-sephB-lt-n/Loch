@@ -16,7 +16,7 @@ class ProjectConfig(pydantic.BaseModel):
         ...,
         description="Mapping of algorithm names to boolean values indicating inclusion (e.g. 'BM25': True)",
     )
-    searchable_files: set[Path] = pydantic.Field(
+    searchable_files: list[Path] = pydantic.Field(
         ...,
         description="Files included in project (i.e. files whose content can be queried/searched)",
     )
