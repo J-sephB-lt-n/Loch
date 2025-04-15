@@ -7,7 +7,7 @@ from pathlib import Path
 
 from loch import constants
 from loch.cli import get_user_input_from_fixed_options
-from loch.filesystem import filter_filepaths 
+from loch.filesystem import filter_filepaths
 from loch.databases import create_search_databases
 from loch.search import run_search
 
@@ -75,7 +75,7 @@ def main():
 
         filepaths_to_process: list[Path] = filter_filepaths(
             filepaths=Path(".").rglob("*"),
-            include_folders=args.include_folders, 
+            include_folders=args.include_folders,
             exclude_folders=args.exclude_folders,
             include_filetypes=args.include_filetypes,
             exclude_filetypes=args.exclude_filetypes,

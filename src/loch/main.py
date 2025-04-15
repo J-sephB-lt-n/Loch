@@ -6,6 +6,7 @@ import argparse
 
 import loch.core
 
+
 def main():
     arg_parser = argparse.ArgumentParser()
     arg_parser.add_argument(

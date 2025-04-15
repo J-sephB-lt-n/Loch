@@ -1,5 +1,6 @@
 from blessed import Terminal
 
+
 def cli_multi_select(options):
     term = Terminal()
     selected = [False] * len(options)
@@ -10,7 +11,7 @@ def cli_multi_select(options):
 
     def draw():
         print(term.clear())
-        print(term.bold_underline(instruction) + '\n')
+        print(term.bold_underline(instruction) + "\n")
 
         for i, (opt, sel) in enumerate(zip(options, selected)):
             line = f"[{'x' if sel else ' '}] {opt}"
@@ -45,14 +46,21 @@ def cli_multi_select(options):
                     return [opt for opt, sel in zip(options, selected) if sel]
                 elif cursor == len(options) + 1:  # Exit
                     exit()
-            elif key.lower() == 'q':  # Quick exit
+            elif key.lower() == "q":  # Quick exit
                 exit()
 
             draw()
 
+
 # Example usage
-if __name__ == '__main__':
-    result = cli_multi_select([
-        "Option 1", "Option 2", "Option 3", "Option 4", "Option 5",
-    ])
+if __name__ == "__main__":
+    result = cli_multi_select(
+        [
+            "Option 1",
+            "Option 2",
+            "Option 3",
+            "Option 4",
+            "Option 5",
+        ]
+    )
     print("\nSelected:", result)
