@@ -1,9 +1,14 @@
-from typing import Literal, Protocol
+"""
+docstring TODO
+"""
 
+from typing import Literal
 
-class QueryAlgorithm(Protocol):
+from loch.data_models.query_algorithm import QueryAlgorithm
+
+class LlmKnowledgeGraph(QueryAlgorithm):
     """
-    An algorithm which can be used to query file content
+    Search over a Knowledge Graph constructed by a generative language model 
     """
 
     def setup(self, step: Literal["index", "query"]) -> None:
@@ -14,10 +19,10 @@ class QueryAlgorithm(Protocol):
             step:   step="index" processes all files for efficient future querying.
                     step="query" prepares the algorithm to process a user query.
         """
-        ...
+        print("llm_knowledge_graph is not yet implemented")
 
     def query(self) -> None:
         """
         Runs an interactive interface which gets a query from the user and processes it
         """
-        ...
+        print("llm_knowledge_graph is not yet implemented")
