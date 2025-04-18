@@ -6,9 +6,10 @@ from typing import Literal
 
 from loch.data_models.query_algorithm import QueryAlgorithm
 
+
 class LlmKnowledgeGraph(QueryAlgorithm):
     """
-    Search over a Knowledge Graph constructed by a generative language model 
+    Search over a Knowledge Graph constructed by a generative language model
     """
 
     def setup(self, step: Literal["index", "query"]) -> None:

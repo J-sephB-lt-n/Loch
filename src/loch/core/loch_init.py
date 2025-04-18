@@ -28,9 +28,9 @@ def loch_init():
 
     selected_files: list[Path] = tui.launch_file_selector()
     selected_query_methods: list[str] = [
-        ALG_NAMES.findkey(alg_name) for alg_name in 
-            tui.launch_multi_select(
-        options=ALG_NAMES.values,
+        ALG_NAMES.findkey(alg_name)
+        for alg_name in tui.launch_multi_select(
+            options=ALG_NAMES.values,
         )
     ]
 

@@ -1,5 +1,7 @@
 """
-docstring TODO                                      
+docstring TODO
+
+NOTE: Should be using the registry pattern for this
 """
 
 from loch import constants

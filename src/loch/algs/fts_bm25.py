@@ -6,9 +6,10 @@ from typing import Literal
 
 from loch.data_models.query_algorithm import QueryAlgorithm
 
+
 class FtsBm25(QueryAlgorithm):
     """
-    Full-Text Search using BM25 
+    Full-Text Search using BM25
     """
 
     def setup(self, step: Literal["index", "query"]) -> None:

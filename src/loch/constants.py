@@ -1,9 +1,11 @@
 from pathlib import Path
 from typing import Final
 
-from loch.common.data_structures import BiMap
+from loch.utils.data_structures import BiMap
 
 ALG_NAMES: Final[BiMap] = BiMap(
+    # TODO: should use the registry pattern here
+    # refer also to algs/__init__.py
     [
         ("fts_bm25", "Full-Text Search (BM25)"),
         ("llm_auto_tagging", "LLM-Generated Auto-Tagging"),

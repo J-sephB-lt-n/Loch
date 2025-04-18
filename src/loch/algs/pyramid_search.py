@@ -6,9 +6,10 @@ from typing import Literal
 
 from loch.data_models.query_algorithm import QueryAlgorithm
 
+
 class PyramidSearch(QueryAlgorithm):
     """
-    https://towardsdatascience.com/overcome-failing-document-ingestion-rag-strategies-with-agentic-knowledge-distillation/ 
+    https://towardsdatascience.com/overcome-failing-document-ingestion-rag-strategies-with-agentic-knowledge-distillation/
     """
 
     def setup(self, step: Literal["index", "query"]) -> None:

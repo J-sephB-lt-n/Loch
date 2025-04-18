@@ -6,9 +6,10 @@ from typing import Literal
 
 from loch.data_models.query_algorithm import QueryAlgorithm
 
+
 class SemanticSearch(QueryAlgorithm):
     """
-    Search over dense embedding vectors 
+    Search over dense embedding vectors
     """
 
     def setup(self, step: Literal["index", "query"]) -> None:
