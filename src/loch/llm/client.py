@@ -41,7 +41,7 @@ class LlmClient:
         elif not stream:
             return httpx.post(
                 url=f"{self.base_url}/api/chat",
-                timeout=60,
+                timeout=5 * 60,
                 json={
                     "model": self.model_name,
                     "messages": messages,
@@ -51,7 +51,7 @@ class LlmClient:
                         text=str(messages),
                     ),
                 },
-            ).json()
+            ).json()["message"]["content"]
 
     def _openai_chat(
         self,

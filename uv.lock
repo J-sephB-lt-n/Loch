@@ -382,6 +382,7 @@ dependencies = [
     { name = "pydantic" },
     { name = "tantivy" },
     { name = "textual" },
+    { name = "tqdm" },
     { name = "transformers" },
 ]
 
@@ -406,6 +407,7 @@ requires-dist = [
     { name = "pydantic", specifier = ">=2.10.6" },
     { name = "tantivy", specifier = ">=0.22.0" },
     { name = "textual", specifier = ">=3.0.1" },
+    { name = "tqdm", specifier = ">=4.67.1" },
     { name = "transformers", specifier = ">=4.49.0" },
 ]
 

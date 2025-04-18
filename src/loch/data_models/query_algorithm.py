@@ -3,10 +3,13 @@ from typing import Literal, Protocol
 
 class QueryAlgorithm(Protocol):
     """
-    An algorithm which can be used to query file content
+    An algorithm which can be used to query text
     """
 
-    def setup(self, step: Literal["index", "query"]) -> None:
+    def setup(
+        self,
+        step: Literal["index", "query"],
+    ) -> None:
         """
         Prepare (initialise) the algorithm for use
 

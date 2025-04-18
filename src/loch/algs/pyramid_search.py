@@ -2,7 +2,8 @@
 docstring TODO
 """
 
-from typing import Literal
+from pathlib import Path
+from typing import Literal, Optional
 
 from loch.data_models.query_algorithm import QueryAlgorithm
 
@@ -12,7 +13,11 @@ class PyramidSearch(QueryAlgorithm):
     https://towardsdatascience.com/overcome-failing-document-ingestion-rag-strategies-with-agentic-knowledge-distillation/
     """
 
-    def setup(self, step: Literal["index", "query"]) -> None:
+    def setup(
+        self,
+        step: Literal["index", "query"],
+        filepaths: Optional[list[Path]] = None,
+    ) -> None:
         """
         Prepare (initialise) the algorithm for use
 

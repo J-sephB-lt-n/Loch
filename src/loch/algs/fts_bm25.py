@@ -2,7 +2,8 @@
 docstring TODO
 """
 
-from typing import Literal
+from pathlib import Path
+from typing import Literal, Optional
 
 from loch.data_models.query_algorithm import QueryAlgorithm
 
@@ -12,7 +13,9 @@ class FtsBm25(QueryAlgorithm):
     Full-Text Search using BM25
     """
 
-    def setup(self, step: Literal["index", "query"]) -> None:
+    def setup(
+        self, step: Literal["index", "query"], filepaths: Optional[list[Path]] = None
+    ) -> None:
         """
         Prepare (initialise) the algorithm for use
 

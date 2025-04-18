@@ -35,7 +35,8 @@ def loch_init():
     ]
 
     for alg_name in selected_query_methods:
-        ALGS[alg_name].setup(step="index")
+        (LOCAL_ALG_CONFIGS_PATH / alg_name).mkdir()
+        ALGS[alg_name].setup(step="index", filepaths=selected_files)
 
     project_config = loch.data_models.ProjectConfig(
         algs={
