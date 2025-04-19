@@ -1,6 +1,6 @@
 """
-docstring TODO
 This terrible code was produced by GPT-4o, and desperately needs to be rewritten
+docstring TODO
 """
 
 from blessed import Terminal
@@ -8,7 +8,9 @@ from blessed import Terminal
 
 def launch_multi_select(options: list[str]) -> list[str]:
     """
-    TODO
+    This terrible code was produced by GPT-4o, and desperately needs to be rewritten
+
+    docstring TODO
     """
     term = Terminal()
     selected = [False] * len(options)

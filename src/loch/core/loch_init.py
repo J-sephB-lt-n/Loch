@@ -2,7 +2,6 @@
 Core logic of the code run when the user calls `loch init`
 """
 
-import json
 from pathlib import Path
 
 from loch.algs import ALGS
@@ -14,6 +13,9 @@ from loch.constants import (
     LOCAL_DATABASES_PATH,
     ALG_NAMES,
 )
+from loch.utils.logging_utils import get_logger
+
+logger = get_logger(__name__)
 
 
 def loch_init():
@@ -36,6 +38,7 @@ def loch_init():
 
     for alg_name in selected_query_methods:
         (LOCAL_ALG_CONFIGS_PATH / alg_name).mkdir()
+        logger.info(f"Indexing files for algorithm [{alg_name}]")
         ALGS[alg_name].setup(step="index", filepaths=selected_files)
 
     project_config = loch.data_models.ProjectConfig(
