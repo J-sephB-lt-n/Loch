@@ -1,5 +1,6 @@
 """
 docstring TODO
+This terrible code was produced by GPT-4o, and desperately needs to be rewritten
 """
 
 from blessed import Terminal

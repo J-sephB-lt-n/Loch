@@ -36,10 +36,11 @@ class LlmQuestionAnswering(QueryAlgorithm):
             / "llm_question_answering"
             / "processed_file_contents.md"
         )
-        if step == "index":
-            self._llm_client = global_llm_client
-            self._llm_client.initialise_if_not_initialised()
 
+        self._llm_client = global_llm_client
+        self._llm_client.initialise_if_not_initialised()
+
+        if step == "index":
             processing_instructions: str = input(
                 "Describe how you would like each document to be summarised/processed"
                 + "\n(leave blank to include file contents in full): "

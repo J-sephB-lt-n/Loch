@@ -47,8 +47,6 @@ def loch_init():
     )
 
     with open(LOCAL_PROJECT_PATH / "project_config.json", "w") as file:
-        json.dump(
-            project_config.model_dump(mode="json"),
-            file,
-            indent=4,
+        file.write(
+            project_config.model_dump_json(indent=4),
         )
