@@ -43,8 +43,8 @@ def loch_init():
 
     project_config = loch.data_models.ProjectConfig(
         algs={
-            ALG_NAMES.findkey(alg_name): (alg_name in selected_query_methods)
-            for alg_name in ALG_NAMES.values
+            alg_name: (alg_name in selected_query_methods)
+            for alg_name in ALG_NAMES.keys
         },
         searchable_files=selected_files,
     )
