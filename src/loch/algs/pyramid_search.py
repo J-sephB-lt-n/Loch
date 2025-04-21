@@ -27,7 +27,13 @@ class PyramidSearch(QueryAlgorithm):
         """
         print("pyramid_search is not yet implemented")
 
-    def query(self) -> None:
+    def query(self, user_query: str):
+        """
+        Retrieve results most relevant to `user_query`
+        """
+        raise NotImplementedError
+
+    def launch_query_interface(self) -> None:
         """
         Runs an interactive interface which gets a query from the user and processes it
         """

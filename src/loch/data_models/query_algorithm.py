@@ -19,8 +19,14 @@ class QueryAlgorithm(Protocol):
         """
         ...
 
-    def query(self) -> None:
+    def query(self, user_query: str):
         """
-        Runs an interactive interface which gets a query from the user and processes it
+        Retrieve results most relevant to `user_query`
+        """
+        ...
+
+    def launch_query_interface(self) -> None:
+        """
+        Runs an interactive interface for user querying
         """
         ...
