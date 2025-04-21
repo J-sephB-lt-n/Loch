@@ -38,7 +38,7 @@ class LlmClient:
         else:
             self._logger.info("LLM client is assumed to be OpenAI API compatible")
             self.api_spec = "openai"
-            self._client = openai.OpenAI(
+            self._api_client = openai.OpenAI(
                 base_url=self.base_url,
                 api_key=self.api_key,
             )
