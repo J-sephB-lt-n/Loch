@@ -1,6 +1,10 @@
 
 # LOCH (LOcal searCH)
 
+IMPORTANT TODO:
+
+- work out how context length exceeded looks on both OpenAI and Ollama, and handle it (generate a warning when it is hit!)
+
 NEW PLAN!
 
 `loch init` initialises a new project (fails if one already exists):

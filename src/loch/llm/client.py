@@ -8,6 +8,7 @@ import logging
 from typing import Final, Optional
 
 import httpx
+import openai
 
 from loch.llm.tokenizers import count_approx_tokens
 from loch.utils.logging_utils import get_logger
@@ -27,6 +28,7 @@ class LlmClient:
         self.model_name = model_name
         self.temperature = temperature
         self._logger = logger
+        self._api_client = None
         if ":11434" in self.base_url:
             self._logger.info(
                 "LLM client is assumed to be Ollama (discovered ':11434' in base_url)"
@@ -36,6 +38,10 @@ class LlmClient:
         else:
             self._logger.info("LLM client is assumed to be OpenAI API compatible")
             self.api_spec = "openai"
+            self._client = openai.OpenAI(
+                base_url=self.base_url,
+                api_key=self.api_key,
+            )
             self.chat = self._openai_chat
 
     def _ollama_chat(
@@ -86,7 +92,32 @@ class LlmClient:
         messages: list[dict],
         stream: bool = False,
     ) -> str:
-        raise NotImplementedError
+        request_kwargs: dict = {
+            "model": self.model_name,
+            "timeout": 30,
+            "messages": messages,
+        }
+        if stream:
+            full_response_text: str = ""
+            response_stream = self._api_client.chat.completions.create(
+                stream=True,
+                **request_kwargs,
+            )
+            for chunk in response_stream:
+                chunk_text: Optional[str] = chunk.choices[0].delta.content
+                if chunk_text is not None:
+                    print(chunk_text, end="")
+                    full_response_text += chunk_text
+            return full_response_text
+        elif not stream:
+            return (
+                self._api_client.chat.completions.create(
+                    stream=False,
+                    **request_kwargs,
+                )
+                .choices[0]
+                .message.content
+            )
 
     def preload_model(self) -> None:
         """
