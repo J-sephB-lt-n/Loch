@@ -31,4 +31,5 @@ def loch_query():
             exit()
 
         # run the query interface of the chosen query algorithm #
+        ALGS[chosen_alg].setup(step="query")
         ALGS[chosen_alg].launch_query_interface()

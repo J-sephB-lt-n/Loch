@@ -1,4 +1,4 @@
-from typing import Literal, Protocol
+from typing import Any, Literal, Protocol
 
 
 class QueryAlgorithm(Protocol):
@@ -19,7 +19,7 @@ class QueryAlgorithm(Protocol):
         """
         ...
 
-    def query(self, user_query: str):
+    def query(self, user_query: str) -> Any:
         """
         Retrieve results most relevant to `user_query`
         """
