@@ -11,6 +11,8 @@ from loch.constants import (
     LOCAL_PROJECT_PATH,
     LOCAL_ALG_CONFIGS_PATH,
     LOCAL_DATABASES_PATH,
+    LOCAL_MODELS_PATH,
+    LOCAL_EMBEDDING_MODELS_PATH,
     ALG_NAMES,
 )
 from loch.utils.logging_utils import get_logger
@@ -27,6 +29,8 @@ def loch_init():
     LOCAL_PROJECT_PATH.mkdir()
     LOCAL_ALG_CONFIGS_PATH.mkdir()
     LOCAL_DATABASES_PATH.mkdir()
+    LOCAL_MODELS_PATH.mkdir()
+    LOCAL_EMBEDDING_MODELS_PATH.mkdir()
 
     selected_files: list[Path] = tui.launch_file_selector()
     selected_query_methods: list[str] = [

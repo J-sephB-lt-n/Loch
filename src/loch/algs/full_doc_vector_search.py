@@ -8,9 +8,9 @@ from typing import Literal, Optional
 from loch.data_models.query_algorithm import QueryAlgorithm
 
 
-class FtsBm25(QueryAlgorithm):
+class EntireDocumentVectorSearch(QueryAlgorithm):
     """
-    Full-Text Search using BM25
+    Search by embedding the entire document (semantic and BM25) 
     """
 
     def setup(
@@ -23,7 +23,7 @@ class FtsBm25(QueryAlgorithm):
             step:   step="index" processes all files for efficient future querying.
                     step="query" prepares the algorithm to process a user query.
         """
-        print("fts_bm25 is not yet implemented")
+        self._embed_model = 
 
     def query(self, user_query: str):
         """

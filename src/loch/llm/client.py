@@ -134,7 +134,7 @@ class LlmClient:
 
 class GlobalLlmClient:
     """
-    Ensures that LLM client can be shared by multiple processes and can be \
+    Ensures that LLM client can be shared by multiple algs and can be \
     lazily initialised (and only once)
     """
 
