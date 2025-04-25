@@ -12,6 +12,7 @@ from .llm_auto_tagging import LlmAutoTagging
 from .llm_knowledge_graph import LlmKnowledgeGraph
 from .llm_question_answering import LlmQuestionAnswering
 from .pyramid_search import PyramidSearch
+from .semantic_code_search import SemanticCodeSearch
 
 ALGS: dict[str, QueryAlgorithm] = {
     "entire_doc_vector_search": EntireDocumentVectorSearch(),
@@ -19,6 +20,7 @@ ALGS: dict[str, QueryAlgorithm] = {
     "llm_knowledge_graph": LlmKnowledgeGraph(),
     "llm_question_answering": LlmQuestionAnswering(),
     "pyramid_search": PyramidSearch(),
+    "semantic_code_search": SemanticCodeSearch(),
 }
 
 assert all((alg_name in ALGS for alg_name in constants.ALG_NAMES.keys))

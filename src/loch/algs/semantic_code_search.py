@@ -8,22 +8,25 @@ from typing import Literal, Optional
 from loch.data_models.query_algorithm import QueryAlgorithm
 
 
-class EntireDocumentVectorSearch(QueryAlgorithm):
+class SemanticCodeSearch(QueryAlgorithm):
     """
-    Search by embedding the entire document (semantic and BM25) 
+    Search over embeddings of code chunks
     """
 
     def setup(
-        self, step: Literal["index", "query"], filepaths: Optional[list[Path]] = None
+        self,
+        step: Literal["index", "query"],
+        filepaths: Optional[list[Path]] = None,
     ) -> None:
         """
         Prepare (initialise) the algorithm for use
 
         Args:
-            step:   step="index" processes all files for efficient future querying.
-                    step="query" prepares the algorithm to process a user query.
+            step:       step="index" processes all files for efficient future querying.
+                        step="query" prepares the algorithm to process a user query.
+            filepaths:  TODO
         """
-        self._embed_model = 
+        print("semantic_code_search is not yet implemented")
 
     def query(self, user_query: str):
         """
@@ -35,4 +38,4 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
         """
         Runs an interactive interface which gets a query from the user and processes it
         """
-        print("fts_bm25 is not yet implemented")
+        print("semantic_code_search is not yet implemented")

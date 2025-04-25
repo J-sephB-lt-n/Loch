@@ -12,17 +12,36 @@ from loch.utils.logging_utils import get_logger
 
 logger: logging.Logger = get_logger(__name__)
 
-MODEL2VEC_DOWNLOAD_DIR: Path = constants.LOCAL_EMBEDDING_MODELS_PATH / "model2vec"
 
-if not MODEL2VEC_DOWNLOAD_DIR.exists():
-    logger.info(
-        f"Downloading model2vec model `{constants.DEFAULT_MODEL2VEC_MODEL}` to `{MODEL2VEC_DOWNLOAD_DIR}`"
-    )
-    MODEL2VEC_DOWNLOAD_DIR.mkdir()
-    embed_model = model2vec.StaticModel.from_pretrained(constants.DEFAULT_MODEL2VEC_MODEL)
-    embed_model.save_pretrained(MODEL2VEC_DOWNLOAD_DIR)
-else:
-    logger.info(
-        f"Loading previously downloaded model2vec model `{constants.DEFAULT_MODEL2VEC_MODEL}` from `{MODEL2VEC_DOWNLOAD_DIR}`"
-    )
-    embed_model = model2vec.StaticModel.from_pretrained(MODEL2VEC_DOWNLOAD_DIR)
+class GlobalModel2VecClient:
+    """
+    Class used to lazily load model2vec, and ensure it can be reused without reinitialising it
+    """
+
+    def __init__(self) -> None:
+        self._model2vec_download_dir: Path = (
+            constants.LOCAL_EMBEDDING_MODELS_PATH / "model2vec"
+        )
+        self.embed_model = None
+
+    def initialise_if_not_initialised(self) -> None:
+        if self.embed_model is None:
+            if not self._model2vec_download_dir.exists():
+                logger.info(
+                    f"Downloading model2vec model `{constants.DEFAULT_MODEL2VEC_MODEL}` to `{self._model2vec_download_dir}`"
+                )
+                self._model2vec_download_dir.mkdir(parents=True)
+                self.embed_model = model2vec.StaticModel.from_pretrained(
+                    constants.DEFAULT_MODEL2VEC_MODEL
+                )
+                self.embed_model.save_pretrained(self._model2vec_download_dir)
+            else:
+                logger.info(
+                    f"Loading previously downloaded model2vec model `{constants.DEFAULT_MODEL2VEC_MODEL}` from `{self._model2vec_download_dir}`"
+                )
+                self.embed_model = model2vec.StaticModel.from_pretrained(
+                    self._model2vec_download_dir
+                )
+
+
+model2vec_client = GlobalModel2VecClient()

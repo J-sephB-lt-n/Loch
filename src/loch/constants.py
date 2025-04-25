@@ -7,7 +7,7 @@ ALG_NAMES: Final[BiMap] = BiMap(
     # TODO: should use the registry pattern here
     # refer also to algs/__init__.py
     [
-        ("code_review", "Code Review"),
+        # ("code_review", "Code Review"),
         ("entire_doc_vector_search", "Entire Document Vector Search (semantic & BM25)"),
         ("llm_auto_tagging", "LLM-Generated Auto-Tagging"),
         ("llm_knowledge_graph", "LLM-Generated Knowledge Graph"),
