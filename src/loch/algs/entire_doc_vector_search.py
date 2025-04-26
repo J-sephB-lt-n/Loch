@@ -6,10 +6,11 @@ single vector and facilitates search over those vectors
 import json
 import logging
 from pathlib import Path
-from typing import Literal, Optional
+from typing import Final, Literal, Optional
 
 import lancedb
 import numpy as np
+from lancedb.rerankers import RRFReranker
 
 from loch import constants, tui
 from loch.data_models.query_algorithm import QueryAlgorithm
@@ -66,7 +67,11 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
                     )
                 ],
             )
-            self._db_table.create_fts_index("text", use_tantivy=False)
+            self._db_table.create_fts_index(
+                "text",
+                use_tantivy=False,  # use native lancedb FTS
+                tokenizer_name="en_stem",  # use stemming
+            )
 
         elif step == "query":
             self._db_table = self._db.open_table(
@@ -90,15 +95,39 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
         if search_method in ("Semantic Search", "Hybrid Search (Semantic+BM25)"):
             search_query_embedding = self._embed_model.encode(search_query)
 
+        VECTOR_DIST_METRIC: Final[str] = "cosine"
+
         match search_method:
             case "Semantic Search":
                 return (
                     self._db_table.search(search_query_embedding)
+                    .distance_type(VECTOR_DIST_METRIC)
                     .limit(top_k)
-                    .distance_type("cosine")
                     .select(["filepath"])
                     .to_list()
                 )
+            case "Full-Text Search (BM25)":
+                return (
+                    self._db_table.search(search_query)
+                    .limit(top_k)
+                    .select(["filepath"])
+                    .to_list()
+                )
+            case "Hybrid Search (Semantic+BM25)":
+                return (
+                    self._db_table.search(query_type="hybrid")
+                    .vector(search_query_embedding)
+                    .distance_type(
+                        VECTOR_DIST_METRIC
+                    )  # this applies to the vector search
+                    .text(search_query)
+                    .limit(50)  # this is the prefetch size
+                    .rerank(
+                        reranker=RRFReranker(K=60),
+                    )
+                    .select(["filepath"])
+                    .to_list()
+                )[:top_k]
             case _:
                 raise ValueError(f"Search method '{search_method}' is not supported")
 
