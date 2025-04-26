@@ -9,7 +9,7 @@ from typing import Literal, Optional
 import lancedb
 import numpy as np
 
-from loch import constants
+from loch import constants, tui
 from loch.data_models.query_algorithm import QueryAlgorithm
 from loch.llm.embeddings.model2vec import model2vec_client
 
@@ -76,4 +76,21 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
         """
         Runs an interactive interface which gets a query from the user and processes it
         """
-        print("fts_bm25 is not yet implemented")
+        search_type: str = tui.launch_single_select(
+            options=[
+                "Semantic Search",
+                "Full-Text Search (BM25)",
+                "Hybrid (Semantic+BM25)",
+            ],
+        )
+        while True:
+            user_query: str = input(
+                "Please enter your question " + "(submit 'exit' to quit): \n"
+            ).strip()
+            if user_query == "exit":
+                print(" ...exiting LlmQuestionAnswering query interface")
+                return
+            results = self.query(
+                user_query=user_query,
+            )
+            print("\n-----------------------------------\n")
