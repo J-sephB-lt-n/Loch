@@ -2,7 +2,7 @@
 docstring TODO
 """
 
-import getpass
+# import getpass
 import json
 import logging
 from typing import Final, Optional
@@ -11,7 +11,7 @@ import httpx
 import openai
 
 from loch.llm.tokenizers import count_approx_tokens
-from loch.utils.logging_utils import get_logger
+# from loch.utils.logging_utils import get_logger
 
 
 class LlmClient:
@@ -54,10 +54,16 @@ class LlmClient:
             "model": self.model_name,
             "messages": messages,
             # "stream": False,
-            "num_ctx": count_approx_tokens(
-                model_name=self.model_name,
-                text=str(messages),
-            ),
+            "options": {
+                "num_ctx": int(
+                    count_approx_tokens(
+                        model_name=self.model_name,
+                        text=str(messages),
+                    )
+                    * 1.1
+                ),  # adding 10% more for safety
+                "temperature": self.temperature,
+            },
         }
         if stream:
             full_response_text: str = ""
@@ -78,6 +84,12 @@ class LlmClient:
                         flush=True,
                     )
                     full_response_text += line_json["message"]["content"]
+            self._logger.info(
+                json.dumps(
+                    line_json,
+                    indent=4,
+                )
+            )
             return full_response_text
 
         elif not stream:
@@ -119,53 +131,59 @@ class LlmClient:
                 .message.content
             )
 
-    def preload_model(self) -> None:
+    def preload_ollama_model(self, num_ctx: Optional[int] = None) -> None:
         """
         Preload the (Ollama) model
         """
+        self._logger.info(f"Preloading ollama model [{self.model_name}]")
+        request_body: dict = {
+            "model": self.model_name,
+            "options": {},
+        }
+        if num_ctx:
+            request_body["options"]["num_ctx"] = num_ctx
+
         _ = httpx.post(
             url=f"{self.base_url}/api/chat",
             timeout=60,
-            json={
-                "model": self.model_name,
-            },
+            json=request_body,
         )
 
 
-class GlobalLlmClient:
-    """
-    Ensures that LLM client can be shared by multiple algs and can be \
-    lazily initialised (and only once)
-    """
-
-    def __init__(self):
-        self._is_initialised = False
-        self._llm_client = None
-        self.logger = get_logger(__name__)
-
-    def initialise_if_not_initialised(self):
-        if not self._is_initialised:
-            self._llm_client = LlmClient(
-                base_url=input("Please provide LLM base URL: "),
-                api_key=getpass.getpass(
-                    "Please provide LLM API key (can leave blank for Ollama): "
-                ),
-                model_name=input("Please provide LLM model name: "),
-                temperature=float(input("Please provide LLM temperature: ")),
-                logger=get_logger(__name__),
-            )
-            self._is_initialised = True
-            if self._llm_client.api_spec == "ollama":
-                self.logger.info(
-                    f"Preloading the Ollama model '{self._llm_client.model_name}'"
-                )
-                self._llm_client.preload_model()
-
-    def chat(self, *args, **kwargs) -> str:
-        if not self._is_initialised:
-            raise RuntimeError("GlobalLlmClient has not been initialised yet")
-
-        return self._llm_client.chat(*args, **kwargs)
-
-
-global_llm_client = GlobalLlmClient()
+# class GlobalLlmClient:
+#     """
+#     Ensures that LLM client can be shared by multiple algs and can be \
+#     lazily initialised (and only once)
+#     """
+#
+#     def __init__(self):
+#         self._is_initialised = False
+#         self._llm_client = None
+#         self.logger = get_logger(__name__)
+#
+#     def initialise_if_not_initialised(self):
+#         if not self._is_initialised:
+#             self._llm_client = LlmClient(
+#                 base_url=input("Please provide LLM base URL: "),
+#                 api_key=getpass.getpass(
+#                     "Please provide LLM API key (can leave blank for Ollama): "
+#                 ),
+#                 model_name=input("Please provide LLM model name: "),
+#                 temperature=float(input("Please provide LLM temperature: ")),
+#                 logger=get_logger(__name__),
+#             )
+#             self._is_initialised = True
+#             if self._llm_client.api_spec == "ollama":
+#                 self.logger.info(
+#                     f"Preloading the Ollama model '{self._llm_client.model_name}'"
+#                 )
+#                 self._llm_client.preload_model()
+#
+#     def chat(self, *args, **kwargs) -> str:
+#         if not self._is_initialised:
+#             raise RuntimeError("GlobalLlmClient has not been initialised yet")
+#
+#         return self._llm_client.chat(*args, **kwargs)
+#
+#
+# global_llm_client = GlobalLlmClient()
