@@ -9,7 +9,8 @@ from tqdm import tqdm
 
 from loch import constants
 from loch.data_models.query_algorithm import QueryAlgorithm
-from loch.llm.client import global_llm_client
+
+# from loch.llm.client import global_llm_client
 from loch.llm import prompts
 
 

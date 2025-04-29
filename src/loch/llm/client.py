@@ -2,16 +2,45 @@
 docstring TODO
 """
 
-# import getpass
+import getpass
 import json
 import logging
+from pathlib import Path
 from typing import Final, Optional
 
 import httpx
 import openai
 
+from loch.constants import LOCAL_LLM_MODELS_PATH
 from loch.llm.tokenizers import count_approx_tokens
-# from loch.utils.logging_utils import get_logger
+from loch.utils.logging_utils import get_logger
+
+logger: logging.Logger = get_logger(__name__)
+
+
+def get_default_llm_config() -> dict:
+    """
+    Get default LLM params and save to project config (so can be reused)
+    """
+    default_config_filepath: Path = LOCAL_LLM_MODELS_PATH / "default_llm_config.json"
+    if not default_config_filepath.exists():
+        with open(default_config_filepath, "w") as file:
+            json.dump(
+                {
+                    "base_url": input("Please provide default LLM API base URL: "),
+                    "api_key": getpass.getpass(
+                        "Please provide default LLM API key (can leave blank for Ollama): "
+                    ),
+                    "model_name": input("Please provide default LLM model name: "),
+                },
+                file,
+                indent=4,
+            )
+        logger.info(f"Default LLM config written to {default_config_filepath}")
+
+    with open(default_config_filepath, "r") as file:
+        logger.info(f"Default LLM config read from {default_config_filepath}")
+        return json.load(file)
 
 
 class LlmClient:
