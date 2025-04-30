@@ -10,8 +10,8 @@ from tqdm import tqdm
 from loch import constants
 from loch.data_models.query_algorithm import QueryAlgorithm
 
-# from loch.llm.client import global_llm_client
 from loch.llm import prompts
+from loch.llm.client import get_default_llm_config, LLmClient
 
 
 class LlmQuestionAnswering(QueryAlgorithm):
@@ -41,7 +41,10 @@ class LlmQuestionAnswering(QueryAlgorithm):
             / "processed_file_contents.md"
         )
 
-        self._llm_client = global_llm_client
+        self._default_llm_config = get_default_llm_config()
+        self._llm_client = LLmClient(
+            base_url=self._default_llm_config["base_url"],
+        )
         self._llm_client.initialise_if_not_initialised()
 
         if step == "index":
