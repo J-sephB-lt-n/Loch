@@ -12,7 +12,7 @@ from loch import constants
 from loch.data_models.query_algorithm import QueryAlgorithm
 
 from loch.llm import prompts
-from loch.llm.client import LLmClient
+from loch.llm.client import LlmClient
 from loch.llm.tokenizers import count_approx_tokens
 from loch.tui import get_llm_config_from_user
 from loch.utils.logging_utils import get_logger
@@ -48,11 +48,12 @@ class LlmQuestionAnswering(QueryAlgorithm):
         )
 
         self.llm_config = get_llm_config_from_user()
-        self._llm_client = LLmClient(
+        self._llm_client = LlmClient(
             base_url=self.llm_config["base_url"],
             api_key=self.llm_config["api_key"],
             model_name=self.llm_config["model_name"],
             temperature=self.llm_config["temperature"],
+            logger=logger,
         )
 
         if step == "index":
