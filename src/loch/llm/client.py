@@ -133,7 +133,13 @@ class LlmClient:
         """
         Preload the (Ollama) model
         """
-        self._logger.info(f"Preloading ollama model [{self.model_name}]")
+        if num_ctx:
+            self._logger.info(
+                f"Preloading ollama model [{self.model_name}] with num_ctx={num_ctx:,}"
+            )
+        elif num_ctx is None:
+            self._logger.info(f"Preloading ollama model [{self.model_name}]")
+
         request_body: dict = {
             "model": self.model_name,
             "options": {},

@@ -4,6 +4,7 @@ CLI interfaces for user to set various configs
 
 import getpass
 import json
+from pathlib import Path
 
 from loch.constants import LOCAL_LLM_MODELS_PATH
 

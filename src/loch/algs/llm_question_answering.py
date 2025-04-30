@@ -2,6 +2,7 @@
 docstring TODO
 """
 
+import logging
 from pathlib import Path
 from typing import Final, Literal, Optional
 
@@ -11,7 +12,12 @@ from loch import constants
 from loch.data_models.query_algorithm import QueryAlgorithm
 
 from loch.llm import prompts
-from loch.llm.client import get_default_llm_config, LLmClient
+from loch.llm.client import LLmClient
+from loch.llm.tokenizers import count_approx_tokens
+from loch.tui import get_llm_config_from_user
+from loch.utils.logging_utils import get_logger
+
+logger: logging.Logger = get_logger(__name__)
 
 
 class LlmQuestionAnswering(QueryAlgorithm):
@@ -41,11 +47,13 @@ class LlmQuestionAnswering(QueryAlgorithm):
             / "processed_file_contents.md"
         )
 
-        self._default_llm_config = get_default_llm_config()
+        self.llm_config = get_llm_config_from_user()
         self._llm_client = LLmClient(
-            base_url=self._default_llm_config["base_url"],
+            base_url=self.llm_config["base_url"],
+            api_key=self.llm_config["api_key"],
+            model_name=self.llm_config["model_name"],
+            temperature=self.llm_config["temperature"],
         )
-        self._llm_client.initialise_if_not_initialised()
 
         if step == "index":
             processing_instructions: str = input(
@@ -67,6 +75,24 @@ class LlmQuestionAnswering(QueryAlgorithm):
 </processing_instructions>
                     """.strip()
                 )
+
+            if self._llm_client.api_spec == "ollama":
+                logger.info(
+                    "Calculating largest included file size in order to load appropriate Ollama model"
+                )
+                max_required_tokens: int = 0
+                for filepath in tqdm(filepaths):
+                    tqdm.write(f"Reading {filepath}")
+                    with open(filepath, "r") as file:
+                        max_required_tokens = max(
+                            max_required_tokens,
+                            count_approx_tokens(
+                                text=file.read(),
+                                model_name=self._llm_client.model_name,
+                            ),
+                        )
+                chosen_num_ctx: int = int(max_required_tokens * 1.1)
+                self._llm_client.preload_ollama_model(num_ctx=chosen_num_ctx)
 
             for filepath in tqdm(filepaths):
                 tqdm.write(f"Processing {filepath}")
@@ -98,6 +124,16 @@ class LlmQuestionAnswering(QueryAlgorithm):
         elif step == "query":
             with open(PROCESSED_FILE_CONTENTS_FILEPATH, "r") as file:
                 self._processed_files_contents = file.read()
+            if self._llm_client.api_spec == "ollama":
+                logger.info("Preloading Ollama model with required context window size")
+                chosen_num_ctx: int = int(
+                    1.1
+                    * count_approx_tokens(
+                        text=self._processed_files_contents,
+                        model_name=self._llm_client.model_name,
+                    ),
+                )
+                self._llm_client.preload_ollama_model(num_ctx=chosen_num_ctx)
 
     def query(
         self,
