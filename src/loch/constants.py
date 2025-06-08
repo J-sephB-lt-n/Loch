@@ -13,8 +13,8 @@ ALG_NAMES: Final[BiMap] = BiMap(
         ("llm_knowledge_graph", "LLM-Generated Knowledge Graph"),
         ("llm_question_answering", "LLM Content Question-Answering"),
         ("pyramid_search", "Agentic Knowledge Distillation (Pyramid Search)"),
-        ("search_agent", "Search Agent"),
-        ("semantic_code_search", "Semantic Code Search"),
+        # ("search_agent", "Search Agent"),
+        # ("semantic_code_search", "Semantic Code Search"),
     ],
 )
 

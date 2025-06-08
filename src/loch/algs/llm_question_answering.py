@@ -1,5 +1,5 @@
 """
-docstring TODO
+LLM answers questions about provided text
 """
 
 import logging

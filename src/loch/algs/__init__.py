@@ -20,7 +20,7 @@ ALGS: dict[str, QueryAlgorithm] = {
     "llm_knowledge_graph": LlmKnowledgeGraph(),
     "llm_question_answering": LlmQuestionAnswering(),
     "pyramid_search": PyramidSearch(),
-    "semantic_code_search": SemanticCodeSearch(),
+    # "semantic_code_search": SemanticCodeSearch(),
 }
 
 assert all((alg_name in ALGS for alg_name in constants.ALG_NAMES.keys))
