@@ -1,5 +1,5 @@
 """
-docstring TODO
+Search over a Knowledge Graph constructed by a generative language model
 """
 
 from pathlib import Path
