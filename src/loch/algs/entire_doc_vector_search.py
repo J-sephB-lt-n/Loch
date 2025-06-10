@@ -14,6 +14,7 @@ from lancedb.rerankers import RRFReranker
 
 from loch import constants, tui
 from loch.data_models.query_algorithm import QueryAlgorithm
+from loch.llm.data_processing import text_chunking
 from loch.llm.embeddings.model2vec import model2vec_client
 from loch.utils.logging_utils import get_logger
 
@@ -43,6 +44,14 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
         self._embed_model = model2vec_client.embed_model
 
         if step == "index":
+            chunking_method: str = tui.launch_single_select(
+                options=[x.value for x in text_chunking.AvailableChunkingMethods],
+                unselectable=[
+                    x.value
+                    for x in text_chunking.AvailableChunkingMethods
+                    if x.value not in ("Full doc (no chunking)")
+                ],
+            )
             files_contents: dict[Path, str] = {}
             for filepath in filepaths:
                 with open(filepath, "r") as file:
