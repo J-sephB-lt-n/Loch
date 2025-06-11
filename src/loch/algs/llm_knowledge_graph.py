@@ -5,12 +5,20 @@ Search over a Knowledge Graph constructed by a generative language model
 from pathlib import Path
 from typing import Literal, Optional
 
+import networkx as nx
+
+from loch import tui
 from loch.data_models.query_algorithm import QueryAlgorithm
+from loch.data_processing import text_chunking
 
 
 class LlmKnowledgeGraph(QueryAlgorithm):
     """
     Search over a Knowledge Graph constructed by a generative language model
+    
+    Notes:
+        - This implementation takes some inspiration from Zep, which itself took inspiration \
+from Microsoft GraphRAG.
     """
 
     def setup(
@@ -26,7 +34,19 @@ class LlmKnowledgeGraph(QueryAlgorithm):
                         step="query" prepares the algorithm to process a user query.
             filepaths:  TODO
         """
-        print("llm_knowledge_graph is not yet implemented")
+        if step == "index":
+            chunking_method: str = tui.launch_single_select(
+                options=[x.value for x in text_chunking.TextChunkMethod],
+                unselectable=[
+                    x.value
+                    for x in text_chunking.TextChunkMethod
+                    if x.value not in ("Full doc (no chunking)")
+                ],
+            )
+            chunker = text_chunking.CHUNKER_LOOKUP[
+                text_chunking.TextChunkMethod(chunking_method)
+            ]
+            # graph = nx.Graph() # https://networkx.org/documentation/stable/tutorial.html
 
     def query(self, user_query: str):
         """

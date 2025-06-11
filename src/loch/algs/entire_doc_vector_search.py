@@ -14,7 +14,7 @@ from lancedb.rerankers import RRFReranker
 
 from loch import constants, tui
 from loch.data_models.query_algorithm import QueryAlgorithm
-from loch.llm.data_processing import text_chunking
+from loch.data_processing import text_chunking
 from loch.llm.embeddings.model2vec import model2vec_client
 from loch.utils.logging_utils import get_logger
 
