@@ -10,6 +10,7 @@ import networkx as nx
 from loch import tui
 from loch.data_models.query_algorithm import QueryAlgorithm
 from loch.data_processing import text_chunking
+from loch.data_processing.text_chunking import TextChunk
 
 
 class LlmKnowledgeGraph(QueryAlgorithm):
@@ -35,7 +36,10 @@ from Microsoft GraphRAG.
             filepaths:  TODO
         """
         if step == "index":
-            chunking_method: str = tui.launch_single_select(
+            if filepaths is None:
+                raise ValueError("filepaths must be provided when step='index'")
+
+            text_chunking_method: str = tui.launch_single_select(
                 options=[x.value for x in text_chunking.TextChunkMethod],
                 unselectable=[
                     x.value
@@ -43,10 +47,27 @@ from Microsoft GraphRAG.
                     if x.value not in ("Full doc (no chunking)")
                 ],
             )
-            chunker = text_chunking.CHUNKER_LOOKUP[
-                text_chunking.TextChunkMethod(chunking_method)
+            text_chunker = text_chunking.CHUNKER_LOOKUP[
+                text_chunking.TextChunkMethod(text_chunking_method)
             ]
-            # graph = nx.Graph() # https://networkx.org/documentation/stable/tutorial.html
+            graph: nx.Graph = nx.Graph()
+            for filepath in filepaths:
+                graph.add_node(
+                    f"source_doc={filepath}",  # node ID
+                    name=str(filepath),
+                    node_type="source_document",
+                )
+                with open(filepath, "r", encoding="utf-8") as file:
+                    file_content: str = file.read()
+                text_chunks: tuple[TextChunk, ...] = text_chunker(
+                    source_doc_name=str(filepath), input_text=file_content
+                )
+                for chunk in text_chunks:
+                    graph.add_node(
+                        f"chunk={chunk.chunk_num_in_doc} doc={filepath}",
+                        name=f"filepath.name chunk {chunk.chunk_num_in_doc}",
+                        node_type="text_chunk",
+                    )
 
     def query(self, user_query: str):
         """
