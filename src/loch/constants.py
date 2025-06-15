@@ -28,3 +28,5 @@ VECTOR_DB_NAME: Final[str] = "local-vector-db"
 VECTOR_DB_PATH: Final[Path] = LOCAL_DATABASES_PATH / VECTOR_DB_NAME
 
 DEFAULT_MODEL2VEC_MODEL: Final[str] = "minishlab/potion-base-8M"
+
+LOCAL_FILE_HOSTING_PORT: Final[int] = 6969
