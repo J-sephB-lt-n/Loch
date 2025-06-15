@@ -8,5 +8,6 @@ def no_chunking(source_doc_name: str, input_text: str) -> tuple[TextChunk, ...]:
             start_idx=0,
             end_idx=len(input_text) - 1,
             text=input_text,
+            chunk_num_in_doc=1,
         ),
     )

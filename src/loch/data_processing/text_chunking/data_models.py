@@ -6,3 +6,4 @@ class TextChunk(pydantic.BaseModel):
     start_idx: int
     end_idx: int
     text: str
+    chunk_num_in_doc: int

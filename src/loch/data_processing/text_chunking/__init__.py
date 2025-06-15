@@ -2,6 +2,7 @@ from enum import Enum
 
 from loch.data_models.text_chunker import TextChunker
 
+from .data_models import TextChunk
 from .fixed_size import fixed_size
 from .no_chunking import no_chunking
 from .semantic import semantic
