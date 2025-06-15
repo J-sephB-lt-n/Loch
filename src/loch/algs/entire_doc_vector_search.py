@@ -44,11 +44,14 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
         self._embed_model = model2vec_client.embed_model
 
         if step == "index":
+            if filepaths is None:
+                raise ValueError("filepaths must be provided when step='index'")
+
             chunking_method: str = tui.launch_single_select(
-                options=[x.value for x in text_chunking.AvailableChunkingMethods],
+                options=[x.value for x in text_chunking.TextChunkMethod],
                 unselectable=[
                     x.value
-                    for x in text_chunking.AvailableChunkingMethods
+                    for x in text_chunking.TextChunkMethod
                     if x.value not in ("Full doc (no chunking)")
                 ],
             )
