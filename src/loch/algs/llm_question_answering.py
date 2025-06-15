@@ -183,3 +183,9 @@ class LlmQuestionAnswering(QueryAlgorithm):
                 verbose=True,
             )
             print("\n-----------------------------------\n")
+
+    def explore(self) -> None:
+        """
+        Provides an interactive exploration of the processed file contents.
+        """
+        print("explore() method not implemented")

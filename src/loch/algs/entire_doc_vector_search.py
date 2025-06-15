@@ -172,3 +172,9 @@ class EntireDocumentVectorSearch(QueryAlgorithm):
                     indent=4,
                 )
             )
+
+    def explore(self) -> None:
+        """
+        Provides an interactive exploration of the vector database.
+        """
+        print("explore() method not implemented")

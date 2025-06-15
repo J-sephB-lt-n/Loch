@@ -39,3 +39,9 @@ class LlmAutoTagging(QueryAlgorithm):
         Runs an interactive interface which gets a query from the user and processes it
         """
         print("llm_auto_tagging is not yet implemented")
+
+    def explore(self) -> None:
+        """
+        Provides an interactive exploration of the auto-generated tags.
+        """
+        print("explore() method not implemented")

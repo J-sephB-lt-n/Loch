@@ -3,6 +3,7 @@ Search over a Knowledge Graph constructed by a generative language model
 """
 
 import importlib
+import json
 from pathlib import Path
 from typing import Literal, Optional
 
@@ -25,7 +26,7 @@ from Microsoft GraphRAG.
 
     def __init__(self):
         self._local_alg_dir: Path = (
-            constants.LOCAL_ALG_CONFIGS_PATH / self.__class__.__name__
+            constants.LOCAL_ALG_CONFIGS_PATH / "llm_knowledge_graph"
         )
 
     def setup(
@@ -45,14 +46,13 @@ from Microsoft GraphRAG.
             if filepaths is None:
                 raise ValueError("filepaths must be provided when step='index'")
 
-            self._local_alg_dir.mkdir()
-
             with open(
                 self._local_alg_dir / "explore_knowledge_graph.html", "w"
             ) as file:
                 file.write(
                     importlib.resources.read_text(
-                        "loch.algs.assets", "explore_knowledge_graph.html"
+                        "loch.algs.assets.llm_knowledge_graph",
+                        "explore_knowledge_graph.html",
                     )
                 )
 
@@ -89,8 +89,9 @@ from Microsoft GraphRAG.
                 self._local_alg_dir / "knowledge_graph_data.json",
                 "w",
             ) as file:
-                file.write(
-                    nx.readwrite.json_graph.node_link_data(graph),
+                json.dump(
+                    nx.readwrite.json_graph.node_link_data(graph, edges="edges"),
+                    file,
                 )
 
     def query(self, user_query: str):
@@ -104,3 +105,9 @@ from Microsoft GraphRAG.
         Runs an interactive interface which gets a query from the user and processes it
         """
         print("llm_knowledge_graph is not yet implemented")
+
+    def explore(self) -> None:
+        """
+        Provides an interactive exploration of the knowledge graph.
+        """
+        print("explore() method not implemented")

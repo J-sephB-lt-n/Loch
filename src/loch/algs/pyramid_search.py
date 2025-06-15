@@ -65,3 +65,9 @@ class PyramidSearch(QueryAlgorithm):
         Runs an interactive interface which gets a query from the user and processes it
         """
         print("pyramid_search is not yet implemented")
+
+    def explore(self) -> None:
+        """
+        Provides an interactive exploration of the pyramid search data structures.
+        """
+        print("explore() method not implemented")
