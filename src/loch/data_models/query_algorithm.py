@@ -33,3 +33,10 @@ class QueryAlgorithm(Protocol):
         Runs an interactive interface for user querying
         """
         ...
+
+    def explore(self) -> None:
+        """
+        Provides an interactive or visual exploration of the algorithm's data structures,
+        allowing users to understand and navigate through the indexed content.
+        """
+        ...

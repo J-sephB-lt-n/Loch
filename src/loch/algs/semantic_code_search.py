@@ -39,3 +39,9 @@ class SemanticCodeSearch(QueryAlgorithm):
         Runs an interactive interface which gets a query from the user and processes it
         """
         print("semantic_code_search is not yet implemented")
+
+    def explore(self) -> None:
+        """
+        Provides an interactive exploration of the code embeddings.
+        """
+        print("explore() method not implemented")
