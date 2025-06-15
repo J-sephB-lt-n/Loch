@@ -27,7 +27,6 @@ from Microsoft GraphRAG.
         self._local_alg_dir: Path = (
             constants.LOCAL_ALG_CONFIGS_PATH / self.__class__.__name__
         )
-        self._local_alg_dir.mkdir()
 
     def setup(
         self,
@@ -45,6 +44,8 @@ from Microsoft GraphRAG.
         if step == "index":
             if filepaths is None:
                 raise ValueError("filepaths must be provided when step='index'")
+
+            self._local_alg_dir.mkdir()
 
             with open(
                 self._local_alg_dir / "explore_knowledge_graph.html", "w"
