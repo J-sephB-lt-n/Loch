@@ -25,7 +25,7 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/loch"]
-include = ["src/loch/algs/assets/*"]
+include = ["src/loch/algs/assets/**"]
 
 [dependency-groups]
 lint = ["mypy>=1.15.0", "pylint>=3.3.4", "ruff>=0.9.9"]
