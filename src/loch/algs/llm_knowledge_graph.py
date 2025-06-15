@@ -2,12 +2,13 @@
 Search over a Knowledge Graph constructed by a generative language model
 """
 
+import importlib
 from pathlib import Path
 from typing import Literal, Optional
 
 import networkx as nx
 
-from loch import tui
+from loch import constants, tui
 from loch.data_models.query_algorithm import QueryAlgorithm
 from loch.data_processing import text_chunking
 from loch.data_processing.text_chunking import TextChunk
@@ -21,6 +22,12 @@ class LlmKnowledgeGraph(QueryAlgorithm):
         - This implementation takes some inspiration from Zep, which itself took inspiration \
 from Microsoft GraphRAG.
     """
+
+    def __init__(self):
+        self._local_alg_dir: Path = (
+            constants.LOCAL_ALG_CONFIGS_PATH / self.__class__.__name__
+        )
+        self._local_alg_dir.mkdir()
 
     def setup(
         self,
@@ -38,6 +45,15 @@ from Microsoft GraphRAG.
         if step == "index":
             if filepaths is None:
                 raise ValueError("filepaths must be provided when step='index'")
+
+            with open(
+                self._local_alg_dir / "explore_knowledge_graph.html", "w"
+            ) as file:
+                file.write(
+                    importlib.resources.read_text(
+                        "loch.algs.assets", "explore_knowledge_graph.html"
+                    )
+                )
 
             text_chunking_method: str = tui.launch_single_select(
                 options=[x.value for x in text_chunking.TextChunkMethod],
@@ -68,6 +84,13 @@ from Microsoft GraphRAG.
                         name=f"filepath.name chunk {chunk.chunk_num_in_doc}",
                         node_type="text_chunk",
                     )
+            with open(
+                self._local_alg_dir / "knowledge_graph_data.json",
+                "w",
+            ) as file:
+                file.write(
+                    nx.readwrite.json_graph.node_link_data(graph),
+                )
 
     def query(self, user_query: str):
         """
