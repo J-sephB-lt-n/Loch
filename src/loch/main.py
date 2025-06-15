@@ -15,15 +15,17 @@ def main():
     )
     args = arg_parser.parse_args()
 
-    if args.command not in ("init", "query", "cleanup"):
-        raise ValueError(
-            f"Unknown command 'loch {args.command}'."
-            "Valid options are 'loch init', 'loch query', 'loch cleanup'"
-        )
-
     if args.command == "init":
         loch.core.loch_init()
+    elif args.command == "explore":
+        loch.core.loch_explore()
     elif args.command == "query":
         loch.core.loch_query()
     elif args.command == "cleanup":
         loch.core.loch_cleanup()
+    else:
+        raise ValueError(
+            f"Unknown command 'loch {args.command}'."
+            "Valid options are "
+            "['loch init', 'loch explore', 'loch query', 'loch cleanup']"
+        )
