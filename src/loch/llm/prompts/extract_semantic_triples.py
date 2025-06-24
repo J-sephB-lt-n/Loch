@@ -1,4 +1,4 @@
-extract_semantic_triples: str = """
+extract_semantic_triples_prompt: str = """
 <document>
 {{ document_contents }}
 </document>
@@ -8,6 +8,7 @@ Your output should be in basic English - easily understood by someone whose firs
 is not English.
 Make subject, predicate and object as short as possible.
 Do not include stopwords.
+Your output must contain a JSON markdown code block.
 
 <non-negotiable-output-format>
 ```json
